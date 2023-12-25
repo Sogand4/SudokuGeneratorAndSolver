@@ -1,7 +1,10 @@
+import java.util.HashSet;
+import java.util.Set;
+
 public class sudokuSolver {
     public static void main(String[] args) {
         int[][] sudokuGrid = {
-            {5, 3, 0, 0, 7, 0, 0, 0, 0},
+            {0, 0, 0, 7, 7, 0, 0, 0, 0},
             {6, 0, 0, 1, 9, 5, 0, 0, 0},
             {0, 9, 8, 0, 0, 0, 0, 6, 0},
             {8, 0, 0, 0, 6, 0, 0, 0, 3},
@@ -12,15 +15,104 @@ public class sudokuSolver {
             {0, 0, 0, 0, 8, 0, 0, 7, 9}
         };
 
-        if (solveSudoku(sudokuGrid)) {
-            System.out.println("Sudoku solved successfully:");
-            printSudoku(sudokuGrid);
+        if (gridIsNotValid(sudokuGrid)) {
+            System.out.println("Starting grid is invalid. Please fix it and try again");
         } else {
-            System.out.println("No solution exists.");
+            if (solveSudoku(sudokuGrid)) {
+                System.out.println("Sudoku solved successfully:");
+                printSudoku(sudokuGrid);
+            } else {
+                System.out.println("No solution exists.");
+            }
         }
     }
 
-    // Backtracking algorithm to solve Sudoku
+    // Checks that the given grid is valid
+    private static boolean gridIsNotValid(int[][] grid) {
+        int[][] reversedGrid = reverseMatrix(grid);
+
+        for (int i = 0; i < 9; i++) {
+            if (!isValidLine(grid[i]) || !isValidLine(reversedGrid[i]) || !isValidBox(grid, i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static int[][] reverseMatrix(int[][] matrix) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        int[][] reversedMatrix = new int[numCols][numRows];
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                reversedMatrix[j][i] = matrix[i][j];
+            }
+        }
+
+        return reversedMatrix;
+    }
+
+    // Checks that the line (either a row or column) contains no duplicates and no invalid numbers
+    private static boolean isValidLine(int[] line) {
+        Set<Integer> numSeen = new HashSet<>();
+
+        for (int i = 0; i < 9; i++) {
+            if (line[i] > 9 || line[i] < 0) {
+                return false;
+            }
+
+            if (numSeen.contains(i)) {
+                return false;
+            } else if (line[i] != 0) {
+                numSeen.add(line[i]);
+            }
+        }
+        return true;
+    }
+
+    // Checks that the given box contains no duplicates or invalid numbers
+    private static boolean isValidBox(int[][] grid, int boxNum) {
+        Set<Integer> numSeen = new HashSet<>();
+        int rowIndexStart = 0;
+        int colIndexStart = 0;
+
+        // set indexes to check that all 9 boxes are valid
+        if (boxNum == 0 || boxNum == 3 || boxNum == 6) {
+            colIndexStart = 0;
+        } else if (boxNum == 1 || boxNum == 4 || boxNum == 7) {
+            colIndexStart = 3;
+        } else {
+            colIndexStart = 6;
+        }
+
+        if (boxNum == 0 || boxNum == 1 || boxNum == 2) {
+            rowIndexStart = 0;
+        } else if (boxNum == 3 || boxNum == 4 || boxNum == 5) {
+            rowIndexStart = 3;
+        } else {
+            rowIndexStart = 6;
+        }
+
+        for (int i = rowIndexStart; i < rowIndexStart + 3; i++) {
+            for (int k = colIndexStart; k < colIndexStart + 3; k++) {
+                if (grid[i][k] > 9 || grid[i][k] < 0) {
+                    return false;
+                }
+
+                if (numSeen.contains(i)) {
+                    return false;
+                } else if (grid[i][k] != 0) {
+                    numSeen.add(grid[i][k]);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    // Backtracking algorithm to solve Sudoku. Sets grid to the first solution found
     private static boolean solveSudoku(int[][] grid) {
         // Find an empty cell
         int[] emptyCell = findEmptyCell(grid);
