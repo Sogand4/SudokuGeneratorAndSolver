@@ -4,7 +4,7 @@ import java.util.Set;
 public class sudokuSolver {
     public static void main(String[] args) {
         int[][] sudokuGrid = {
-            {0, 0, 0, 7, 7, 0, 0, 0, 0},
+            {1, 0, 0, 0, 7, 0, 0, 0, 0},
             {6, 0, 0, 1, 9, 5, 0, 0, 0},
             {0, 9, 8, 0, 0, 0, 0, 6, 0},
             {8, 0, 0, 0, 6, 0, 0, 0, 3},
@@ -15,7 +15,7 @@ public class sudokuSolver {
             {0, 0, 0, 0, 8, 0, 0, 7, 9}
         };
 
-        if (gridIsNotValid(sudokuGrid)) {
+        if (!gridIsValid(sudokuGrid)) {
             System.out.println("Starting grid is invalid. Please fix it and try again");
         } else {
             if (solveSudoku(sudokuGrid)) {
@@ -28,7 +28,7 @@ public class sudokuSolver {
     }
 
     // Checks that the given grid is valid
-    private static boolean gridIsNotValid(int[][] grid) {
+    private static boolean gridIsValid(int[][] grid) {
         int[][] reversedGrid = reverseMatrix(grid);
 
         for (int i = 0; i < 9; i++) {
@@ -63,7 +63,7 @@ public class sudokuSolver {
                 return false;
             }
 
-            if (numSeen.contains(i)) {
+            if (numSeen.contains(line[i])) {
                 return false;
             } else if (line[i] != 0) {
                 numSeen.add(line[i]);
@@ -101,7 +101,7 @@ public class sudokuSolver {
                     return false;
                 }
 
-                if (numSeen.contains(i)) {
+                if (numSeen.contains(grid[i][k] )) {
                     return false;
                 } else if (grid[i][k] != 0) {
                     numSeen.add(grid[i][k]);
