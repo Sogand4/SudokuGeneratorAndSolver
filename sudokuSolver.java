@@ -78,7 +78,7 @@ public class sudokuSolver {
         int rowIndexStart = 0;
         int colIndexStart = 0;
 
-        // set indexes to check that all 9 boxes are valid
+        // Set indexes to check that all 9 boxes are valid
         if (boxNum == 0 || boxNum == 3 || boxNum == 6) {
             colIndexStart = 0;
         } else if (boxNum == 1 || boxNum == 4 || boxNum == 7) {
@@ -112,12 +112,12 @@ public class sudokuSolver {
         return true;
     }
 
-    // Backtracking algorithm to solve Sudoku. Sets grid to the first solution found
+    // DFS with backtracking algorithm to solve Sudoku. Sets grid to the first solution found.
     private static boolean solveSudoku(int[][] grid) {
-        // Find an empty cell
         int[] emptyCell = findEmptyCell(grid);
+
+        // Found solution if no empty cells remaining
         if (emptyCell == null) {
-            // No empty cell found, Sudoku is solved
             return true;
         }
 
@@ -127,12 +127,10 @@ public class sudokuSolver {
         // Try placing digits 1 to 9 in the empty cell
         for (int num = 1; num <= 9; num++) {
             if (isValidPlacement(grid, row, col, num)) {
-                // Place the digit if it's a valid move
                 grid[row][col] = num;
 
-                // Recursively try to solve the rest of the Sudoku
                 if (solveSudoku(grid)) {
-                    return true; // Sudoku is solved
+                    return true;
                 }
 
                 // If placing the digit didn't lead to a solution, backtrack
@@ -140,7 +138,6 @@ public class sudokuSolver {
             }
         }
 
-        // No valid digit found for the current cell, backtrack
         return false;
     }
 
@@ -167,7 +164,7 @@ public class sudokuSolver {
         return true;
     }
 
-    // Find the first empty cell in the Sudoku grid
+    // Find the first empty cell in the Sudoku grid, traversing by rows
     private static int[] findEmptyCell(int[][] grid) {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
@@ -176,7 +173,7 @@ public class sudokuSolver {
                 }
             }
         }
-        return null; // No empty cell found
+        return null;
     }
 
     // Print the Sudoku grid
