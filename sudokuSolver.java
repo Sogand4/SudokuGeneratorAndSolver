@@ -5,25 +5,17 @@ import java.util.List;
 import java.util.Set;
 
 public class sudokuSolver {
-    public static void main(String[] args) {
-        int[][] sudokuGrid = {
-            {0, 0, 0, 0, 7, 0, 0, 0, 0},
-            {6, 0, 0, 1, 9, 5, 0, 0, 0},
-            {0, 9, 8, 0, 0, 0, 0, 6, 0},
-            {8, 0, 0, 0, 6, 0, 0, 0, 3},
-            {4, 0, 0, 8, 0, 3, 0, 0, 1},
-            {7, 0, 0, 0, 2, 0, 0, 0, 6},
-            {0, 6, 0, 0, 0, 0, 2, 8, 0},
-            {0, 0, 0, 4, 1, 9, 0, 0, 5},
-            {0, 0, 0, 0, 8, 0, 0, 7, 9}
-        };
+    private int[][] grid;
 
-        if (!gridIsValid(sudokuGrid)) {
+    public sudokuSolver(int[][] grid) {
+        this.grid = grid;
+
+        if (!gridIsValid()) {
             System.out.println("Starting grid is invalid. Please fix it and try again");
         } else {
-            if (solveSudoku(sudokuGrid)) {
+            if (solveSudoku()) {
                 System.out.println("Sudoku solved successfully:");
-                printSudoku(sudokuGrid);
+                printSudoku();
             } else {
                 System.out.println("No solution exists.");
             }
@@ -31,18 +23,18 @@ public class sudokuSolver {
     }
 
     // Checks that the given grid is valid
-    private static boolean gridIsValid(int[][] grid) {
+    private boolean gridIsValid() {
         int[][] reversedGrid = reverseMatrix(grid);
 
         for (int i = 0; i < 9; i++) {
-            if (!isValidLine(grid[i]) || !isValidLine(reversedGrid[i]) || !isValidBox(grid, i)) {
+            if (!isValidLine(grid[i]) || !isValidLine(reversedGrid[i]) || !isValidBox(i)) {
                 return false;
             }
         }
         return true;
     }
 
-    private static int[][] reverseMatrix(int[][] matrix) {
+    private int[][] reverseMatrix(int[][] matrix) {
         int numRows = matrix.length;
         int numCols = matrix[0].length;
 
@@ -58,7 +50,7 @@ public class sudokuSolver {
     }
 
     // Checks that the line (either a row or column) contains no duplicates and no invalid numbers
-    private static boolean isValidLine(int[] line) {
+    private boolean isValidLine(int[] line) {
         Set<Integer> numSeen = new HashSet<>();
 
         for (int i = 0; i < 9; i++) {
@@ -76,7 +68,7 @@ public class sudokuSolver {
     }
 
     // Checks that the given box contains no duplicates or invalid numbers
-    private static boolean isValidBox(int[][] grid, int boxNum) {
+    private boolean isValidBox(int boxNum) {
         Set<Integer> numSeen = new HashSet<>();
         int rowIndexStart = 0;
         int colIndexStart = 0;
@@ -116,8 +108,8 @@ public class sudokuSolver {
     }
 
     // DFS with backtracking algorithm to solve Sudoku. Sets grid to the first solution found.
-    private static boolean solveSudoku(int[][] grid) {
-        int[] emptyCell = findEmptyCell(grid);
+    private boolean solveSudoku() {
+        int[] emptyCell = findEmptyCell();
         List<Integer> digits = new ArrayList<>();
 
         // Found solution if no empty cells remaining
@@ -138,10 +130,10 @@ public class sudokuSolver {
 
         // Try placing digits 1 to 9 in the empty cell
         for (int num : digits) {
-            if (isValidPlacement(grid, row, col, num)) {
+            if (isValidPlacement(row, col, num)) {
                 grid[row][col] = num;
 
-                if (solveSudoku(grid)) {
+                if (solveSudoku()) {
                     return true;
                 }
 
@@ -154,7 +146,7 @@ public class sudokuSolver {
     }
 
     // Check if a number can be placed in a given cell
-    private static boolean isValidPlacement(int[][] grid, int row, int col, int num) {
+    private boolean isValidPlacement(int row, int col, int num) {
         // Check if 'num' is not present in the current row and column
         for (int i = 0; i < 9; i++) {
             if (grid[row][i] == num || grid[i][col] == num) {
@@ -177,7 +169,7 @@ public class sudokuSolver {
     }
 
     // Find the first empty cell in the Sudoku grid, traversing by rows
-    private static int[] findEmptyCell(int[][] grid) {
+    private int[] findEmptyCell() {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 if (grid[row][col] == 0) {
@@ -189,7 +181,7 @@ public class sudokuSolver {
     }
 
     // Print the Sudoku grid
-    private static void printSudoku(int[][] grid) {
+    private void printSudoku() {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 System.out.print(grid[row][col] + " ");
