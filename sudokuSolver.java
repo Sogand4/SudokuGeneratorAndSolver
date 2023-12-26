@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class sudokuSolver {
+public class sudokuSolver extends sudokuUtils {
     private int[][] grid;
 
     public sudokuSolver(int[][] grid) {
@@ -15,7 +15,6 @@ public class sudokuSolver {
         } else {
             if (solveSudoku()) {
                 System.out.println("Sudoku solved successfully:");
-                printSudoku();
             } else {
                 System.out.println("No solution exists.");
             }
@@ -180,13 +179,7 @@ public class sudokuSolver {
         return null;
     }
 
-    // Print the Sudoku grid
-    private void printSudoku() {
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
-                System.out.print(grid[row][col] + " ");
-            }
-            System.out.println();
-        }
+    public int[][] getGrid() {
+        return grid;
     }
 }
