@@ -1,10 +1,13 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class sudokuSolver {
     public static void main(String[] args) {
         int[][] sudokuGrid = {
-            {1, 0, 0, 0, 7, 0, 0, 0, 0},
+            {0, 0, 0, 0, 7, 0, 0, 0, 0},
             {6, 0, 0, 1, 9, 5, 0, 0, 0},
             {0, 9, 8, 0, 0, 0, 0, 6, 0},
             {8, 0, 0, 0, 6, 0, 0, 0, 3},
@@ -115,6 +118,7 @@ public class sudokuSolver {
     // DFS with backtracking algorithm to solve Sudoku. Sets grid to the first solution found.
     private static boolean solveSudoku(int[][] grid) {
         int[] emptyCell = findEmptyCell(grid);
+        List<Integer> digits = new ArrayList<>();
 
         // Found solution if no empty cells remaining
         if (emptyCell == null) {
@@ -124,8 +128,16 @@ public class sudokuSolver {
         int row = emptyCell[0];
         int col = emptyCell[1];
 
+        for (int i = 1; i <= 9; i++) {
+            digits.add(i);
+        }
+
+        // Shuffle the digits randomly
+        // Ensures that the generator does not produce the same board when inputting a blank grid
+        Collections.shuffle(digits);
+
         // Try placing digits 1 to 9 in the empty cell
-        for (int num = 1; num <= 9; num++) {
+        for (int num : digits) {
             if (isValidPlacement(grid, row, col, num)) {
                 grid[row][col] = num;
 
