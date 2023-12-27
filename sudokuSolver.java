@@ -6,19 +6,27 @@ import java.util.Set;
 
 public class sudokuSolver extends sudokuUtils {
     private int[][] grid;
+    private int solutionCount;
 
     public sudokuSolver(int[][] grid) {
         this.grid = grid;
+        solutionCount = 0;
 
         if (!gridIsValid()) {
             System.out.println("Starting grid is invalid. Please fix it and try again");
-        } else {
-            if (solveSudoku()) {
-                System.out.println("Sudoku solved successfully:");
-            } else {
-                System.out.println("No solution exists.");
-            }
         }
+    }
+
+    public void setSolutionGrid() {
+        if (solveSudoku()) {
+            // solved
+        } else {
+            System.out.println("No solution exists.");
+        }
+    }
+
+    public void setSolutionCount(int[][] grid) {
+        solveSudokuWithAllSolutions(grid);
     }
 
     // Checks that the given grid is valid
@@ -106,9 +114,10 @@ public class sudokuSolver extends sudokuUtils {
         return true;
     }
 
+
     // DFS with backtracking algorithm to solve Sudoku. Sets grid to the first solution found.
     private boolean solveSudoku() {
-        int[] emptyCell = findEmptyCell();
+        int[] emptyCell = findEmptyCell(grid);
         List<Integer> digits = new ArrayList<>();
 
         // Found solution if no empty cells remaining
@@ -129,7 +138,7 @@ public class sudokuSolver extends sudokuUtils {
 
         // Try placing digits 1 to 9 in the empty cell
         for (int num : digits) {
-            if (isValidPlacement(row, col, num)) {
+            if (isValidPlacement(grid, row, col, num)) {
                 grid[row][col] = num;
 
                 if (solveSudoku()) {
@@ -144,8 +153,41 @@ public class sudokuSolver extends sudokuUtils {
         return false;
     }
 
+    // DFS with backtracking algorithm to solve Sudoku. Gets number of all solutions possible.
+    private boolean solveSudokuWithAllSolutions(int[][] grid) {
+        List<Integer> digits = new ArrayList<>();
+
+        for (int i = 1; i <= 9; i++) {
+            digits.add(i);
+        }
+
+        Collections.shuffle(digits);
+
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (grid[row][col] == 0) {
+                    for (int num : digits) {
+                        if (isValidPlacement(grid, row, col, num)) {
+                            grid[row][col] = num;
+
+                            if (solveSudokuWithAllSolutions(grid)) {
+                                solutionCount++;
+                            }
+
+                            grid[row][col] = 0;
+                        }
+                    }
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     // Check if a number can be placed in a given cell
-    private boolean isValidPlacement(int row, int col, int num) {
+    private boolean isValidPlacement(int[][] grid, int row, int col, int num) {
         // Check if 'num' is not present in the current row and column
         for (int i = 0; i < 9; i++) {
             if (grid[row][i] == num || grid[i][col] == num) {
@@ -168,7 +210,7 @@ public class sudokuSolver extends sudokuUtils {
     }
 
     // Find the first empty cell in the Sudoku grid, traversing by rows
-    private int[] findEmptyCell() {
+    private static int[] findEmptyCell(int[][] grid) {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 if (grid[row][col] == 0) {
@@ -181,5 +223,9 @@ public class sudokuSolver extends sudokuUtils {
 
     public int[][] getGrid() {
         return grid;
+    }
+
+    public int getSolutionCount() {
+        return solutionCount;
     }
 }
