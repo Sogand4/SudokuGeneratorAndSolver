@@ -17,6 +17,10 @@ app.get('/solveSudoku', (req, res) => {
     res.sendFile(__dirname + '/Solver/sudokuSolver.html');
 });
 
+app.get('/generateSudoku', (req, res) => {
+    res.sendFile(__dirname + '/Generator/sudokuGenerator.html');
+});
+
 app.post('/solveSudoku', (req, res) => {
     const grid = req.body.grid;
 
