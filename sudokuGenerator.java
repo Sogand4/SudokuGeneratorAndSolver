@@ -3,6 +3,7 @@ import java.util.Random;
 // Generates a sudoku puzzle that has a unique solution
 public class sudokuGenerator extends sudokuUtils {
     private static final int NUMCELLSREMOVED = 50;
+    
     public static void main(String[] args) {
         int[][] solvedGrid = generateSolvedGrid();
         //printSudoku(solvedGrid);
