@@ -64,7 +64,7 @@ async function solveSudoku() {
         if (solvedValues && solvedValues.length > 0) {
             updateOutputGrid(solvedValues);
         } else {
-            alert('No solution found for the given input.');
+            alert('An error occurred.');
         }
     } catch (error) {
         console.error('Error:', error);

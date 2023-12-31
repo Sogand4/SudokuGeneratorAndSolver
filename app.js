@@ -27,8 +27,8 @@ app.post('/solveSudoku', (req, res) => {
         const solution = solver.getGrid();
         res.json({ solution });
     } catch (error) {
-        console.error('Error:', error.message);
-        res.status(500).json({ error: error.message });
+        //console.error('Error:', error.message);
+        res.status(500).json({ message: error.message });
     }
 });
 
