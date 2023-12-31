@@ -12,9 +12,7 @@ class sudokuSolver extends sudokuUtils {
     }
 
     setSolutionGrid() {
-        if (this.solveSudoku()) {
-            // solved
-        } else {
+        if (!this.solveSudoku()) {
             throw new Error("No solution exists");
         }
     }
