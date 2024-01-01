@@ -1,13 +1,15 @@
 const { Random } = require("random-js");
-const { SudokuSolver } = require("./solver");
+const sudokuSolver = require("./solver");
+const sudokuUtils = require('../sudokuUtils');
 
-class SudokuGenerator extends SudokuUtils {
+class SudokuGenerator extends sudokuUtils {
 
     constructor(numCellsRemoved) {
+        super();
         this.numCellsRemoved = numCellsRemoved;
-        const solvedGrid = this.generateSolvedGrid();
+        this.solvedGrid = this.generateSolvedGrid();
         // this.printSudoku(solvedGrid);
-        this.sudokuPuzzle = this.generateSudokuPuzzle(solvedGrid);
+        this.sudokuPuzzle = this.generateSudokuPuzzle(this.solvedGrid);
         //this.printSudoku(sudokuPuzzle);
     }
 
@@ -24,9 +26,9 @@ class SudokuGenerator extends SudokuUtils {
             [0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
 
-        const solvedGrid = new SudokuSolver(blankBoard);
-        solvedGrid.setSolutionGrid();
-        return solvedGrid.getGrid();
+        const solver = new sudokuSolver(blankBoard);
+        solver.setSolutionGrid();
+        return solver.getGrid();
     }
 
     generateSudokuPuzzle(solvedGrid) {
@@ -58,7 +60,7 @@ class SudokuGenerator extends SudokuUtils {
     }
 
     hasUniqueSolution(grid) {
-        const solvedGrid = new SudokuSolver(grid);
+        const solvedGrid = new sudokuSolver(grid);
         solvedGrid.setSolutionCount(grid);
         return solvedGrid.getSolutionCount() === 1;
     }
@@ -73,6 +75,10 @@ class SudokuGenerator extends SudokuUtils {
 
     getPuzzleGrid() {
         return this.sudokuPuzzle;
+    }
+
+    getSolvedGrid() {
+        return this.solvedGrid;
     }
 
 }
