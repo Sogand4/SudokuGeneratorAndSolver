@@ -1,1 +1,8 @@
 Sudoku Solver and Generator.
+
+User can generate easy, medium, or hard sudoku boards where each have a unique solution.
+User is also able to click to see the solution to the generated board.
+
+The user can also input their sudoku board and recieve the solution to the board.
+
+To run, do "nodemon app.js"
