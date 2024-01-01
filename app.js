@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const sudokuSolver = require('./Solver/sudokuSolver.js');
+const sudokuSolver = require('./sudokuLogic/solver.js');
 const path = require('path');
 require('dotenv').config();
 
@@ -8,18 +8,18 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/js')));
 
 app.get('/', (req, res) => {
     res.send('Hello, this is the Sudoku Solver and Generator app!');
 });
 
 app.get('/solveSudoku', (req, res) => {
-    res.sendFile(__dirname + '/Solver/sudokuSolver.html');
+    res.sendFile(path.join(__dirname, 'public/views', 'sudokuSolver.html'));
 });
 
 app.get('/generateSudoku', (req, res) => {
-    res.sendFile(__dirname + '/Generator/sudokuGenerator.html');
+    res.sendFile(path.join(__dirname, 'public/views', 'sudokuGenerator.html'));
 });
 
 app.post('/solveSudoku', (req, res) => {

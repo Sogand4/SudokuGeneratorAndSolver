@@ -57,9 +57,9 @@ function updateOutputGrid(solvedValues) {
 async function solveSudoku() {
     const inputValues = getInputValues();
     try {
-        const solvedValues = await solveSudokuRequest(inputValues);
+        solvedValues = await solveSudokuRequest(inputValues);
 
-        console.log('Solved Values:', solvedValues);
+        //console.log('Solved Values:', solvedValues);
 
         if (solvedValues && solvedValues.length > 0) {
             updateOutputGrid(solvedValues);
@@ -67,14 +67,16 @@ async function solveSudoku() {
             alert('An error occurred.');
         }
     } catch (error) {
-        console.error('Error:', error);
+        //console.error('Error:', error);
         alert(error.message);
     }
 }
 
 async function solveSudokuRequest(inputValues) {
+    var response = null;
+
     try {
-        const response = await fetch('http://localhost:3000/solveSudoku', {
+        response = await fetch('http://localhost:3000/solveSudoku', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -91,6 +93,7 @@ async function solveSudokuRequest(inputValues) {
         throw error;
     }
 }
+
 
 createInputGrid();
 createOutputGrid();

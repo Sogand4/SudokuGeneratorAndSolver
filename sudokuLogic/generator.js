@@ -1,5 +1,5 @@
 const { Random } = require("random-js");
-const { SudokuSolver } = require("../Solver/sudokuSolver");
+const { SudokuSolver } = require("./solver");
 
 class SudokuGenerator extends SudokuUtils {
 
@@ -76,3 +76,5 @@ class SudokuGenerator extends SudokuUtils {
     }
 
 }
+
+module.exports = SudokuGenerator;
