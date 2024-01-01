@@ -1,6 +1,6 @@
-function generateBoard(difficulty) {
+async function generateBoard(difficulty) {
     try {
-        repsonse = getBoards(difficulty);
+        response = await getBoards(difficulty);
 
         document.getElementById('boardContainer').innerHTML = formatBoard(response.board);
         document.getElementById('revealSolutionBtn').style.display = 'block';
@@ -16,16 +16,16 @@ async function getBoards(difficulty) {
     // Set the number of clues based on difficulty
     switch (difficulty) {
         case 'easy':
-            numCellsRemoved = 45;
+            numCellsRemoved = 30;
             break;
         case 'medium':
-            numCellsRemoved = 55;
+            numCellsRemoved = 45;
             break;
         case 'hard':
-            numCellsRemoved = 75;
+            numCellsRemoved = 55;
             break;
         default:
-            numCellsRemoved = 45;
+            numCellsRemoved = 30;
     }
 
     try {
@@ -41,7 +41,8 @@ async function getBoards(difficulty) {
         if (!response.ok) {
             throw new Error(data.message);
         }
-        return data.solution;
+
+        return { board: data.board, solvedBoard: data.solvedBoard };
     } catch (error) {
         throw error;
     }
@@ -55,11 +56,11 @@ function revealSolution() {
 function formatBoard(board) {
     let html = '<table>';
 
-    for (let i = 0; i < board.length; i++) {
+    for (let i = 0; i < 9; i++) {
         html += '<tr>';
-        for (let j = 0; j < board[i].length; j++) {
+        for (let j = 0; j < 9; j++) {
             const value = board[i][j];
-            const cellContent = value !== 0 ? value : '<input type="text" maxlength="1" />';
+            const cellContent = value;
             html += `<td>${cellContent}</td>`;
         }
         html += '</tr>';
